@@ -1,31 +1,38 @@
-﻿using Contracts.Responses;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Contracts.Responses;
+using Newtonsoft.Json;
 
 namespace PersonService.DataAccess
 {
     public class PersonRepository
     {
+        private readonly List<PersonResponse> _people;
+
+        public PersonRepository()
+        {
+            var jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"DataAccess", "Data", "Persons.json");
+            if (File.Exists(jsonPath))
+            {
+                var jsonData = File.ReadAllText(jsonPath);
+                _people = JsonConvert.DeserializeObject<List<PersonResponse>>(jsonData) ?? new List<PersonResponse>();
+            }
+            else
+            {
+                _people = new List<PersonResponse>();
+            }
+        }
+
         public List<PersonResponse> GetPeople()
         {
-            return new List<PersonResponse>
-            {
-                new PersonResponse
-                {
-                    CellPhoneNumber = "123456789",
-                    Name = "John",
-                    LastName = "Doe",
-                    DocumentType = "DNI",
-                    DocumentNumber = "12345678"
-                },
-                new PersonResponse
-                {
-                    CellPhoneNumber = "987654321",
-                    Name = "Jane",
-                    LastName = "Smith",
-                    DocumentType = "Passport",
-                    DocumentNumber = "A987654"
-                }
-            };
+            return _people;
+        }
+
+        public PersonResponse GetPersonByPhoneNumber(string phoneNumber)
+        {
+            return _people.FirstOrDefault(p => p.CellPhoneNumber == phoneNumber);
         }
     }
 }
