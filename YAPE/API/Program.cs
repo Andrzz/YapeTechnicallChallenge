@@ -1,6 +1,9 @@
+using Application.Interfaces;
+using Application.Services;
+using Infrastructure.Adapters;
 using Infrastructure.DataBase;
-using Infrastructure.Soap;
 using Microsoft.EntityFrameworkCore;
+using Shared.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,20 +12,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSingleton<SoapServiceClient>(sp =>
+builder.Services.AddSingleton<ClientServiceAdapter>(sp =>
 {
     var soapUrl = "http://localhost:64119/Service.svc";
-    return new SoapServiceClient(soapUrl);
+    return new ClientServiceAdapter(soapUrl);
 });
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<SoapServiceClient>(provider =>
+builder.Services.AddScoped<IPersonServiceClient>(provider =>
 {
     var soapUrl = builder.Configuration["SoapSettings:Url"];
-    return new SoapServiceClient(soapUrl);
+    return new ClientServiceAdapter(soapUrl);
 });
+builder.Services.AddScoped<IClientService, ClientService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
