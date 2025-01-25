@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Mappers;
 using Domain.Entities;
 using Infrastructure.DataBase;
 using Shared.Interfaces;
@@ -25,11 +26,13 @@ namespace Application.Services
                 throw new InvalidOperationException("Validation failed with the SOAP service.");
             }
 
+            var validatedClient = ClientToValidatedClientMapper.MapClientToValidatedClient(response);
+
             //client.Id = Guid.NewGuid();
             //_context.Clients.Add(client);
             //await _context.SaveChangesAsync();
 
-            return client.Id;
+            return validatedClient.Id;
         }
     }
 }

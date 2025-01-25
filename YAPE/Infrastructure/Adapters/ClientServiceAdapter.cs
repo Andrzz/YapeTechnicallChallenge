@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 using Shared.Interfaces;
 using Shared.RequestBuilders;
 using Shared.Responses;
@@ -31,10 +29,11 @@ namespace Infrastructure.Adapters
 
             if (!httpResponse.IsSuccessStatusCode)
             {
-                throw new Exception($"Error en la llamada al servicio SOAP: {httpResponse.ReasonPhrase}");
+                throw new Exception($"Error calling SOAP service: {httpResponse.ReasonPhrase}");
             }
             var responseContent = await httpResponse.Content.ReadAsStringAsync();
             return SOAPSerializer.DeserializeSoapResponse(responseContent);
-        }       
+        }
+       
     }
 }

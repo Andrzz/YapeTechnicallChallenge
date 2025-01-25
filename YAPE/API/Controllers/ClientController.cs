@@ -21,7 +21,7 @@ namespace YapeService.Controllers
             try
             {
                 var clientId = await _clientService.CreateClientAsync(request);
-                return Ok(new { Id = clientId });
+                return Ok($@"User created correctly, the GUID for the user is {clientId}");
             }
             catch (InvalidOperationException ex)
             {
