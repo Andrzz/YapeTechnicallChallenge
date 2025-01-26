@@ -78,6 +78,7 @@ The solution emphasizes modularity, scalability, and maintainability, leveraging
 
 ### Configuration
 1. Add the WCF service URL in the `appsettings.json` file of the API:
+   ```json
    {
      "SoapSettings": {
        "Url": "http://localhost:XXXXX/PersonWCFService.svc"
@@ -125,6 +126,7 @@ Framework: NUnit
 POST /api/Client/CreateClient
 
 Request:
+```json
 {
   "name": "jhon",
   "lastName": "doe",
@@ -134,6 +136,7 @@ Request:
   "reasonOfUse": "Traveling"
 }
 Response:
+```json
 {
   "message": "User created successfully",
   "clientId": "c33ea802-c32c-4040-ab69-18356fff54fc"
@@ -142,6 +145,7 @@ Response:
 GET /api/Client/GetValidatedClients
 
 Response:
+```json
 [
   {
     "id": "c33ea802-c32c-4040-ab69-18356fff54fc",
