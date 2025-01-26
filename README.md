@@ -122,12 +122,10 @@ Framework: NUnit
  - Coverage: Includes tests for the WCF service, API business logic, and adapters.
 
 ## Endpoints
-**API**
-POST /api/Client/CreateClient
-
-Request:
+### API 
+**POST /api/Client/CreateClient**
+**Request:**
 ```json
-{
 {
   "name": "jhon",
   "lastName": "doe",
@@ -136,18 +134,16 @@ Request:
   "documentNumber": "12345678",
   "reasonOfUse": "Traveling"
 }
-}
-
-Response:
+```
+**Response:**
 ```json
 {
   "message": "User created successfully",
   "clientId": "c33ea802-c32c-4040-ab69-18356fff54fc"
 }
-
-GET /api/Client/GetValidatedClients
-
-Response:
+```
+**GET /api/Client/GetValidatedClients**
+**Response:**
 ```json
 [
   {
@@ -160,10 +156,9 @@ Response:
     "reasonOfUse": "Traveling"
   }
 ]
-
-GET /api/Client/HealthCheck
-
-Response:
+```
+**GET /api/Client/HealthCheck**
+**Response:**
 plaintext
 Service Running...
 
