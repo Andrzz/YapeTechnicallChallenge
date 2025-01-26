@@ -8,5 +8,8 @@ namespace Contracts.Interfaces
     {
         [OperationContract]
         PersonResponse GetPersonsByPhoneNumber(string cellPhoneNumber);
+
+        [OperationContract]
+        string HealthCheck();
     }
 }
