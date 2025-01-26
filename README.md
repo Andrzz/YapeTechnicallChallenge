@@ -159,19 +159,18 @@ Framework: NUnit
 ```
 **GET /api/Client/HealthCheck**
 **Response:**
-plaintext
-Service Running...
+ - plaintext: Service Running...
 
-**WCF**
+
+## WCF
 **SOAP Method:**
-GetPersonsByPhoneNumber(string cellPhoneNumber)
-Retrieves person details by phone number.
+ - GetPersonsByPhoneNumber(string cellPhoneNumber) -> Retrieves person details by phone number.
 
 ## License
-This project does not include a license.
+ - This project does not include a license.
 
 ## Author
-Andres Felipe Osorio Echavarria
+ - Andres Felipe Osorio Echavarria
 
 ## Additional Notes
 When starting the WCF service in Visual Studio, you may encounter a warning:
