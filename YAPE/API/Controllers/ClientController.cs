@@ -38,6 +38,7 @@ namespace YapeService.Controllers
                 var soapErrorMessage = ex.InnerException?.Message ?? ex.Message;
                 return StatusCode(500, new { Error = soapErrorMessage });
             }
+
         }
         [HttpGet("GetValidatedClients")]
         public async Task<IActionResult> GetValidatedClients()
@@ -46,5 +47,10 @@ namespace YapeService.Controllers
             return Ok(clients);
         }
 
+        [HttpGet("HealthCheck")]
+        public async Task<IActionResult> HealthCheck()
+        {
+            return Ok("Service Runing...");
+        }
     }
 }

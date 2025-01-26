@@ -1,8 +1,8 @@
 ﻿using Shared.Responses;
 
-namespace Shared.Interfaces
+namespace Infrastructure.Interfaces
 {
-    public interface IPersonServiceClient
+    public interface IClientServiceAdapter
     {
         Task<GetPersonsByPhoneNumberResult> GetPersonsByPhoneNumberAsync(string cellPhoneNumber);
     }

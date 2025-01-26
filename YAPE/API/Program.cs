@@ -3,8 +3,9 @@ using Application.Interfaces;
 using Application.Services;
 using Infrastructure.Adapters;
 using Infrastructure.DataBase;
+using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Shared.Interfaces;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,16 +14,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSingleton<ClientServiceAdapter>(sp =>
-{
-    var soapUrl = "http://localhost:64119/Service.svc";
-    return new ClientServiceAdapter(soapUrl);
-});
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseInMemoryDatabase("YapeDatabase"));
+var logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
-builder.Services.AddScoped<IPersonServiceClient>(provider =>
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+builder.Logging.AddConsole(); 
+builder.Logging.AddDebug();   
+builder.Services.AddScoped<IClientServiceAdapter>(provider =>
 {
     var soapUrl = builder.Configuration["SoapSettings:Url"];
     return new ClientServiceAdapter(soapUrl);

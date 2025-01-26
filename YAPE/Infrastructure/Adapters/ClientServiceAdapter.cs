@@ -1,12 +1,12 @@
 ﻿using System.Text;
-using Shared.Interfaces;
+using Infrastructure.Interfaces;
 using Shared.RequestBuilders;
 using Shared.Responses;
 using Shared.Serializers;
 
 namespace Infrastructure.Adapters
 {
-    public class ClientServiceAdapter : IPersonServiceClient
+    public class ClientServiceAdapter : IClientServiceAdapter
     {
         private readonly string _soapUrl;
         private readonly HttpClient _httpClient;

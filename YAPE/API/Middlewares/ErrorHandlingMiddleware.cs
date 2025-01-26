@@ -1,4 +1,6 @@
-﻿namespace API.Middlewares
+﻿using System.Text.Json;
+
+namespace API.Middlewares
 {
     public class ErrorHandlingMiddleware
     {
@@ -19,28 +21,37 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred.");
+                
+                _logger.LogError(ex, "An unexpected error occurred: {Message}", ex.Message);
+
+                
                 await HandleExceptionAsync(context, ex);
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = exception switch
             {
                 ArgumentException => StatusCodes.Status400BadRequest,
                 KeyNotFoundException => StatusCodes.Status404NotFound,
-                _ => StatusCodes.Status500InternalServerError,
+                HttpRequestException => StatusCodes.Status502BadGateway, 
+                InvalidOperationException => StatusCodes.Status422UnprocessableEntity, 
+                _ => StatusCodes.Status500InternalServerError 
             };
-
-            return context.Response.WriteAsync(new
+            var response = new
             {
                 StatusCode = context.Response.StatusCode,
                 Message = exception.Message,
-                Details = exception.InnerException?.Message
-            }.ToString());
+                Details = exception.InnerException?.Message,
+                Timestamp = DateTime.UtcNow 
+            };
+
+            
+            var jsonResponse = JsonSerializer.Serialize(response);
+
+            await context.Response.WriteAsync(jsonResponse);
         }
     }
-
 }
