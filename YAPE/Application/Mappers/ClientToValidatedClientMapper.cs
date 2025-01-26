@@ -5,16 +5,17 @@ namespace Application.Mappers
 {
     public static class ClientToValidatedClientMapper
     {
-        public static YapeValidatedClient MapClientToValidatedClient(GetPersonsByPhoneNumberResult client)
+        public static YapeValidatedClient MapClientToValidatedClient(GetPersonsByPhoneNumberResult response, Client client)
         {
             return new YapeValidatedClient() 
             { 
-                CellPhoneNumber = client.CellPhoneNumber,
-                DocumentNumber = client.DocumentNumber, 
-                DocumentType = client.DocumentType, 
+                CellPhoneNumber = response.CellPhoneNumber,
+                DocumentNumber = response.DocumentNumber, 
+                DocumentType = response.DocumentType, 
                 Id = Guid.NewGuid(),
-                LastName = client.LastName, 
-                Name = client.Name,     
+                LastName = response.LastName, 
+                Name = response.Name,
+                ReasonOfUse = client.ReasonOfUse
             };
         }
     }

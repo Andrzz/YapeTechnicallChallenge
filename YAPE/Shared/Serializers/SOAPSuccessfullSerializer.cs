@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace Shared.Serializers
 {
-    public static class SOAPSerializer
+    public static class SOAPSuccessfullSerializer
     {
         public static GetPersonsByPhoneNumberResult DeserializeSoapResponse(string soapResponse)
         {

@@ -19,21 +19,43 @@ namespace Infrastructure.Adapters
 
         public async Task<GetPersonsByPhoneNumberResult> GetPersonsByPhoneNumberAsync(string cellPhoneNumber)
         {
-            var soapRequestBody = SOAPBuilder.BuildSoapRequest(cellPhoneNumber);
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, _soapUrl)
+            if (string.IsNullOrWhiteSpace(cellPhoneNumber))
             {
-                Content = new StringContent(soapRequestBody, Encoding.UTF8, "text/xml")
-            };
-            httpRequest.Headers.Add("SOAPAction", "http://tempuri.org/IPersonService/GetPersonsByPhoneNumber");
-            var httpResponse = await _httpClient.SendAsync(httpRequest);
-
-            if (!httpResponse.IsSuccessStatusCode)
-            {
-                throw new Exception($"Error calling SOAP service: {httpResponse.ReasonPhrase}");
+                throw new ArgumentException("CellPhoneNumber cannot be null or empty.", nameof(cellPhoneNumber));
             }
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            return SOAPSerializer.DeserializeSoapResponse(responseContent);
+
+            try
+            {
+                var soapRequestBody = SOAPBuilder.BuildSoapRequest(cellPhoneNumber);
+                var httpRequest = new HttpRequestMessage(HttpMethod.Post, _soapUrl)
+                {
+                    Content = new StringContent(soapRequestBody, Encoding.UTF8, "text/xml")
+                };
+                httpRequest.Headers.Add("SOAPAction", "http://tempuri.org/IPersonService/GetPersonsByPhoneNumber");
+
+                var httpResponse = await _httpClient.SendAsync(httpRequest);
+
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    var soapFaultMessage = SOAPFaultSerializer.ExtractSoapFaultMessage(responseContent);
+                    throw new Exception($"SOAP Service Error: {soapFaultMessage} (Status Code: {httpResponse.StatusCode})");
+                }
+
+                var responseContentSuccess = await httpResponse.Content.ReadAsStringAsync();
+                return SOAPSuccessfullSerializer.DeserializeSoapResponse(responseContentSuccess);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception("Network error occurred while calling the SOAP service.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred in GetPersonsByPhoneNumberAsync: {ex.Message}", ex);
+            }
         }
-       
+
+
+
     }
 }

@@ -1,3 +1,4 @@
+using API.Middlewares;
 using Application.Interfaces;
 using Application.Services;
 using Infrastructure.Adapters;
@@ -19,7 +20,7 @@ builder.Services.AddSingleton<ClientServiceAdapter>(sp =>
 });
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseInMemoryDatabase("YapeDatabase"));
 
 builder.Services.AddScoped<IPersonServiceClient>(provider =>
 {
@@ -28,7 +29,7 @@ builder.Services.AddScoped<IPersonServiceClient>(provider =>
 });
 builder.Services.AddScoped<IClientService, ClientService>();
 var app = builder.Build();
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

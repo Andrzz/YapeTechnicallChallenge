@@ -18,15 +18,33 @@ namespace YapeService.Controllers
         [HttpPost("CreateClient")]
         public async Task<IActionResult> CreateClient([FromBody] Client request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var clientId = await _clientService.CreateClientAsync(request);
-                return Ok($@"User created correctly, the GUID for the user is {clientId}");
+                return Ok(new { Message = "User created successfully", ClientId = clientId });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Extraer mensaje del SOAP desde la InnerException
+                var soapErrorMessage = ex.InnerException?.Message ?? ex.Message;
+                return StatusCode(500, new { Error = soapErrorMessage });
             }
         }
+        [HttpGet("GetValidatedClients")]
+        public async Task<IActionResult> GetValidatedClients()
+        {
+            var clients = await _clientService.GetValidatedClientsAsync();
+            return Ok(clients);
+        }
+
     }
 }
