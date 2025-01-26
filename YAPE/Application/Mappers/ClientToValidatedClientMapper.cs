@@ -5,7 +5,7 @@ namespace Application.Mappers
 {
     public static class ClientToValidatedClientMapper
     {
-        public static YapeValidatedClient MapClientToValidatedClient(PersonResponse client)
+        public static YapeValidatedClient MapClientToValidatedClient(GetPersonsByPhoneNumberResult client)
         {
             return new YapeValidatedClient() 
             { 

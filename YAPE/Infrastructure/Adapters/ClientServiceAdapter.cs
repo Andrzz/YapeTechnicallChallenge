@@ -17,7 +17,7 @@ namespace Infrastructure.Adapters
             _httpClient = new HttpClient();
         }
 
-        public async Task<PersonResponse> GetPersonsByPhoneNumberAsync(string cellPhoneNumber)
+        public async Task<GetPersonsByPhoneNumberResult> GetPersonsByPhoneNumberAsync(string cellPhoneNumber)
         {
             var soapRequestBody = SOAPBuilder.BuildSoapRequest(cellPhoneNumber);
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, _soapUrl)

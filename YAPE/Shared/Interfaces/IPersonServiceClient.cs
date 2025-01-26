@@ -4,6 +4,6 @@ namespace Shared.Interfaces
 {
     public interface IPersonServiceClient
     {
-        Task<PersonResponse> GetPersonsByPhoneNumberAsync(string cellPhoneNumber);
+        Task<GetPersonsByPhoneNumberResult> GetPersonsByPhoneNumberAsync(string cellPhoneNumber);
     }
 }
