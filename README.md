@@ -128,6 +128,7 @@ POST /api/Client/CreateClient
 Request:
 ```json
 {
+{
   "name": "jhon",
   "lastName": "doe",
   "cellPhoneNumber": "1234567890",
@@ -135,6 +136,8 @@ Request:
   "documentNumber": "12345678",
   "reasonOfUse": "Traveling"
 }
+}
+
 Response:
 ```json
 {
