@@ -9,7 +9,7 @@ namespace Infrastructure.Adapters
     public class ClientServiceAdapter : IClientServiceAdapter
     {
         private readonly string _soapUrl;
-        private readonly HttpClient _httpClient;
+        public HttpClient _httpClient; // This should be private, but it's public for testing purposes
 
         public ClientServiceAdapter(string soapUrl)
         {
